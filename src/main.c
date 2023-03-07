@@ -15,7 +15,6 @@ void initialize() {
 		ENABLE
 	);
 
-	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
@@ -36,6 +35,8 @@ void initialize() {
 	USART_Init(USART1, &USART_InitStructure);
 	USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);
 
+	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
+
 	NVIC_InitStructure.NVIC_IRQChannel = USART1_IRQn;
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 2;
@@ -51,13 +52,13 @@ void loop() {
 	if (!static_display)
 		LED_value = !LED_value;
 
-	Delay_Ms(200);
+	Delay_Ms(100);
 }
 
 void main() {
 	Delay_Init();
 	initialize();
-	printf("System is ready now. SystemClk: %d\r\n", SystemCoreClock);
+	printf("System is ready now. SystemClock: %d\r\n", SystemCoreClock);
 
 	while (1)
 		loop();
