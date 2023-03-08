@@ -1,5 +1,5 @@
 #include "ch32v00x.h"
-#include "debug.h"
+#include "ch32v_debug.h"
 #include <stdio.h>
 
 int static_display = 0;
