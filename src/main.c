@@ -1,5 +1,6 @@
-#include "ch32v00x.h"
 #include "ch32v_debug.h"
+#include "ch32v00x.h"
+#include "core_systick.h"
 #include <stdio.h>
 
 int static_display = 0;
@@ -35,8 +36,6 @@ void initialize() {
 	USART_Init(USART1, &USART_InitStructure);
 	USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);
 
-	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
-
 	NVIC_InitStructure.NVIC_IRQChannel = USART1_IRQn;
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 2;
@@ -52,13 +51,17 @@ void loop() {
 	if (!static_display)
 		LED_value = !LED_value;
 
-	Delay_Ms(100);
+	delay_ms(100);
+	//printf("clock: %d, %d\r\n", millis(), micros());
 }
 
 void main() {
-	Delay_Init();
+	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
+
+	initialize_systick_interrupt();
 	initialize();
-	printf("System is ready now. SystemClock: %d\r\n", SystemCoreClock);
+
+	printf("System is ready now. SystemCoreClock: %d\r\n", SystemCoreClock);
 
 	while (1)
 		loop();
